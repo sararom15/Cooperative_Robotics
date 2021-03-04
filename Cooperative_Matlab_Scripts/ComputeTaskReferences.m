@@ -1,6 +1,8 @@
 function [uvms] = ComputeTaskReferences(uvms, mission)
 % compute the task references here
 
+%xdot -> [lin, ang] 
+
 %% reference for tool-frame position control task
 [ang, lin] = CartError(uvms.vTg , uvms.vTt);
 uvms.xdot.t = 0.2 * [ang; lin];
@@ -48,4 +50,13 @@ uvms.xdot.min_alt = Saturate(uvms.xdot.min_alt, 0.5);
 coeff_velocity = 0.2; 
 uvms.xdot.alt_land = coeff_velocity * (0.1 - uvms.altitude);
 uvms.xdot.alt_land = Saturate(uvms.xdot.alt_land, 0.2); 
+
+
+%% Ex: Simulation 4 reference rate for underactuated
+% I want a feedback of the velocity. 
+uvms.xdot.ua = uvms.p_dot; 
+
+%% Ex 3: Jacobian Allignment x_vehicle/rock 
+% 0.4 as coeff velocity to be faster. 
+uvms.xdot.xi = 0.4*(0-norm(uvms.v_xi));
 

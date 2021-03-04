@@ -86,4 +86,34 @@ uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv;
 % Since the motion to control is on the z axis of the vehicle, we can
 % implement the same Jacobian of the previous ex (1.2) 
 
+%% Ex: Jacobian for underactuated control task 
+uvms.Jua = [zeros(6,7), eye(6)]; 
+
+%% Ex 3: Jacobian Allignment x_vehicle/rock 
+
+
+rock_center = [12.2025   37.3748  -39.8860]'; % in world frame coordinates
+
+%rock center coordinates projected on x plane wrt vehicle frame. 
+v_rockcenter = [1 0 0; 0 1 0; 0 0 0] * uvms.vTw(1:3, 1:3) * rock_center; 
+
+v_iv = [1 0 0]'; 
+
+% compute the misallignment of these two versor 
+uvms.v_xi = ReducedVersorLemma(v_rockcenter, v_iv); 
+% avoid division by 0
+
+%direction of rho
+if (norm(uvms.v_xi) > 0) 
+    
+    xi = uvms.v_xi/norm(uvms.v_xi);
+else 
+    xi = [0 0 0]'; 
+end 
+
+%The jacobian will be responsable only to drive this value to zero 
+%[arms(1,7), ang(1,3), lin(1,3)] 
+uvms.Jxi = [zeros(1,7) zeros(1,3) xi']; 
+
+
 end

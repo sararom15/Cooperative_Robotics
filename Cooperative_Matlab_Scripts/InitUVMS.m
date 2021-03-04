@@ -43,7 +43,7 @@ uvms.phi = zeros(3,1);
 uvms.sensorDistance = 0;
 uvms.v_rho = 0; 
 uvms.altitude = 0; 
-
+uvms.v_xi = 0; 
 
 uvms.Jjl = [];
 uvms.Jmu = [];
@@ -57,6 +57,8 @@ uvms.Jv_v = [];
 %uvms.Jvlin = []; 
 %uvms.Jvang = []; 
 uvms.Jalt = []; 
+uvms.Jua = [];
+uvms.Jxi = [];
 
 uvms.xdot.jl = [];
 uvms.xdot.mu = [];
@@ -67,6 +69,9 @@ uvms.xdot.vlin = [];
 uvms.xdot.vang = []; 
 uvms.xdot.min_alt = []; 
 uvms.xdot.alt_land = []; 
+uvms.xdot.ua = [];
+uvms.xdot.xi = []; 
+
 
 uvms.A.jl = zeros(7,7);
 uvms.A.mu = 0;
@@ -77,7 +82,8 @@ uvms.A.vang = zeros(3,3);
 uvms.A.vlin = zeros(3,3); 
 uvms.A.min_alt = zeros();
 uvms.A.alt_land = zeros(); 
-
+uvms.A.ua = zeros(6,6); 
+uvms.A.xi = zeros(1,1); 
 
 %uvms.Aa.v = eye(6); 
 uvms.Aa.vlin = eye(3);
@@ -85,7 +91,7 @@ uvms.Aa.vang = eye(3);
 uvms.Aa.ha = eye(1); 
 uvms.Aa.t = zeros(6); 
 uvms.Aa.alt_land = zeros(1); 
-
+uvms.Aa.xi = zeros(1);
 %uvms.A.v_rho = zeros(3,1); 
 
 end

@@ -19,19 +19,30 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.vang = eye(3); 
             uvms.Aa.vlin = eye(3); 
             uvms.Aa.alt_land = zeros(1); 
+            uvms.Aa.xi = zeros(1);
             uvms.Aa.t = zeros(6); 
             
-
-        case 2 %Landing Action
+        case 2 
+            uvms.Aa.min_alt = eye(1); 
             uvms.Aa.ha = eye(1); 
+            %uvms.Aa.v = eye(6);
+            uvms.Aa.vang = zeros(3); 
+            % we want to mantain the goal position 
+            uvms.Aa.vlin = eye(3);
+            uvms.Aa.alt_land = zeros(1); 
+            uvms.Aa.xi = eye(1); 
+            uvms.Aa.t = zeros(6); 
+
+        case 3 %Landing Action
+            uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1); 
-            
+            uvms.Aa.xi = eye(1); 
             %if the request is to land mantaining the attitude of the vehicle, then
             %the uvms.Aa.vang should be set as follows: 
             %uvms.Aa.vang = eye(3); 
             
             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
-            uvms.Aa.vang = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time) * eye(3); 
+            uvms.Aa.vang = zeros(3,3); 
             uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time) * eye(3);
             
             %activate the altitude control task 
@@ -65,9 +76,14 @@ uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho));
 %if altitude > uvms_min_dist + uvms.max_dist, A = 0 
 uvms.A.min_alt = DecreasingBellShapedFunction(uvms.min_dist, uvms.max_dist, 0, 1, uvms.altitude) * uvms.Aa.min_alt;
 
-%% Ex 2.1: "Landing action" : reference for altitude control task 
+%% Ex 2.1: "Landing action" : activation function for altitude control task 
 % control task to regulate the altitude to zero: it is an equality task,
 % then activation function is 1
 uvms.A.alt_land = eye(1) * uvms.Aa.alt_land;
 
 
+%% Ex : activation function for underactuated control task 
+uvms.A.ua = diag([0 0 0 1 0 0]); 
+
+%% Ex 3: Jacobian Allignment x_vehicle/rock 
+uvms.A.xi = IncreasingBellShapedFunction(0.005, 0.1, 0, 1, norm(uvms.v_xi)) * uvms.Aa.xi;

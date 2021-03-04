@@ -6,7 +6,7 @@ close all
 
 % Simulation variables (integration and final time)
 deltat = 0.005;
-end_time = 25;
+end_time = 100;
 loop = 1;
 maxloops = ceil(end_time/deltat);
 
@@ -63,11 +63,11 @@ uvms.wTg = [uvms.wRg uvms.goalPosition; 0 0 0 1];
 
 %% Ex 1: define the init position and goal position of the vehicle 
 % init position 
-uvms.p = [10.5 35.5 -36 0 0 1.57]'; 
+uvms.p = [8.5 38.5 -36 0 -0.06 0.5]'; 
 
 %goal position (wrt world frame) for the vehicle position task 
 uvms.v_goalPosition = [10.5 37.5 -38]'; 
-uvms.wRgv = rotation(0, pi/4, 0); 
+uvms.wRgv = rotation(0, -0.06, 0.5); 
 uvms.wTgv = [uvms.wRgv uvms.v_goalPosition; 0 0 0 1]; 
 
 % defines the tool control point
@@ -94,8 +94,12 @@ for t = 0:deltat:end_time
     % add all the other tasks here!
     % the sequence of iCAT_task calls defines the priority;
         
+    %% Ex: Underactuation 
+    %[Qp, ydotbar] = iCAT_task(uvms.A.ua,     uvms.Jua,    Qp, ydotbar, uvms.xdot.ua,  0.0001,   0.01, 10);    
+
+    
     %% Ex 1.2: Minimum altitude control task 
-    %[Qp, ydotbar] = iCAT_task(uvms.A.min_alt,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.min_alt,  0.0001,   0.01, 10);    
+    [Qp, ydotbar] = iCAT_task(uvms.A.min_alt,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.min_alt,  0.0001,   0.01, 10);    
 
     %% Ex 1.1 
     %%%% Horizontal Attitude control task with higher priority than Postion control task  
@@ -106,10 +110,13 @@ for t = 0:deltat:end_time
     [Qp, ydotbar] = iCAT_task(uvms.A.vang,     uvms.Jvang,    Qp, ydotbar, uvms.xdot.vang,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vlin,     uvms.Jvlin,    Qp, ydotbar, uvms.xdot.vlin,  0.0001,   0.01, 10); 
 
-
+    %% Ex 3: "Allignment x_vehicle/rock action" : allignment control task 
+    [Qp, ydotbar] = iCAT_task(uvms.A.xi,     uvms.Jxi,    Qp, ydotbar, uvms.xdot.xi,  0.0001,   0.01, 10);  
+    
+    
     %% Ex 2.1:  "Landing action" : Altitude control task 
     % control task to regulate the altitude to zero
-    %[Qp, ydotbar] = iCAT_task(uvms.A.alt_land,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.alt_land,  0.0001,   0.01, 10); 
+    [Qp, ydotbar] = iCAT_task(uvms.A.alt_land,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.alt_land,  0.0001,   0.01, 10); 
     
     %% Ex 0 : tool position control task 
     %[Qp, ydotbar] = iCAT_task(uvms.A.t,    uvms.Jt,    Qp, ydotbar, uvms.xdot.t,  0.0001,   0.01, 10);
@@ -122,8 +129,13 @@ for t = 0:deltat:end_time
     uvms.p_dot = ydotbar(8:13);
     
     % Integration
-	uvms.q = uvms.q + uvms.q_dot*deltat;
+	
+    uvms.q = uvms.q + uvms.q_dot*deltat;
     % beware: p_dot should be projected on <v>
+    
+    % disturbance 
+    %%%%%%%%%%%%%%%%%
+    
     uvms.p = integrate_vehicle(uvms.p, uvms.p_dot, deltat);
     
     % check if the mission phase should be changed
@@ -140,10 +152,10 @@ for t = 0:deltat:end_time
     % add debug prints here
     if (mod(t,0.1) == 0)
         t
-        uvms.sensorDistance
-        [w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
-        w_ang 
-        w_lin
+        %uvms.sensorDistance
+        %w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
+        %w_ang 
+        %w_lin
         mission.phase
         %ydotbar
 
