@@ -58,5 +58,5 @@ uvms.xdot.ua = uvms.p_dot;
 
 %% Ex 3: Jacobian Allignment x_vehicle/rock 
 % 0.4 as coeff velocity to be faster. 
-uvms.xdot.xi = 0.4*(0-norm(uvms.v_xi));
+uvms.xdot.xi = 0.2*(0-norm(uvms.v_xi));
 

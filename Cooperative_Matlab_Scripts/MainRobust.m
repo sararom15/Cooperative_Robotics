@@ -53,7 +53,7 @@ uvms.q = [-0.0031 0 0.0128 -1.2460 0.0137 0.0853-pi/2 0.0137]';
 % [x y z r(rot_x) p(rot_y) y(rot_z)]
 % RPY angles are applied in the following sequence
 % R(rot_x, rot_y, rot_z) = Rz (rot_z) * Ry(rot_y) * Rx(rot_x)
- %uvms.p = [8.5 38.5 -38 0 -0.06 0.5]'; 
+uvms.p = [8.5 38.5 -36 0 -0.06 0.5]'; 
 
 %% Ex 0 : define the goal position for the tool position task 
 % defines the goal position (wrt world frame) for the end-effector/tool position task

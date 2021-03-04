@@ -75,7 +75,7 @@ end
 %The jacobian will be responsable only to drive this value to zero 
 uvms.Jha = [zeros(1,7) zeros(1,3) rho']; 
 
-%% Ex 1.2 : Jacobia for the minimum altitude from the seafloor 
+%% Ex 1.2 : Jacobian for the minimum altitude from the seafloor 
 %%%% the distance to mantain is along z direction of the vehicle. then we
 %%%% can compute the jacobian considering only the  as follow: 
 uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv; 
@@ -90,22 +90,18 @@ uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv;
 uvms.Jua = [zeros(6,7), eye(6)]; 
 
 %% Ex 3: Jacobian Allignment x_vehicle/rock 
-
-
 rock_center = [12.2025   37.3748  -39.8860]'; % in world frame coordinates
 
-%rock center coordinates projected on x plane wrt vehicle frame. 
+%rock center coordinates projected on x-y plane wrt vehicle frame. 
 v_rockcenter = [1 0 0; 0 1 0; 0 0 0] * uvms.vTw(1:3, 1:3) * rock_center; 
 
 v_iv = [1 0 0]'; 
 
 % compute the misallignment of these two versor 
 uvms.v_xi = ReducedVersorLemma(v_rockcenter, v_iv); 
-% avoid division by 0
 
-%direction of rho
+%direction of xi
 if (norm(uvms.v_xi) > 0) 
-    
     xi = uvms.v_xi/norm(uvms.v_xi);
 else 
     xi = [0 0 0]'; 
