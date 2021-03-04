@@ -17,10 +17,10 @@ uvms.xdot.t(4:6) = Saturate(uvms.xdot.t(4:6), 0.2);
 [w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
 
 %attitude vehicle control task 
-uvms.xdot.vang = Saturate(0.2 * w_ang, 0.2); 
+uvms.xdot.vang = Saturate(0.2 * w_ang, 0.3); 
 
 %position vehicle control task 
-uvms.xdot.vlin = Saturate(0.2 * w_lin, 0.2);
+uvms.xdot.vlin = Saturate(0.2 * w_lin, 0.3);
 
 %uvms.xdot.v= 0.2*[w_lin; w_ang]; 
 %uvms.xdot.v(1:3)=Saturate(uvms.xdot.v(1:3),0.2);
@@ -58,5 +58,5 @@ uvms.xdot.ua = uvms.p_dot;
 
 %% Ex 3: Jacobian Allignment x_vehicle/rock 
 % 0.4 as coeff velocity to be faster. 
-uvms.xdot.xi = 0.2*(0-norm(uvms.v_xi));
-
+uvms.xdot.xi = -0.3*norm(uvms.v_xi);
+uvms.xdot.xi = Saturate(uvms.xdot.xi, 0.2); 

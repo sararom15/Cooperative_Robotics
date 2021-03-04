@@ -104,14 +104,16 @@ for t = 0:deltat:end_time
     %% Ex 1.1 
     %%%% Horizontal Attitude control task with higher priority than Postion control task  
     [Qp, ydotbar] = iCAT_task(uvms.A.ha,     uvms.Jha,    Qp, ydotbar, uvms.xdot.ha,  0.0001,   0.01, 10);    
-
+    
+    %% Ex 3: "Allignment x_vehicle/rock action" : allignment control task 
+    [Qp, ydotbar] = iCAT_task(uvms.A.xi,     uvms.Jxi,    Qp, ydotbar, uvms.xdot.xi,  0.0001,   0.01, 10);  
+    
     %%%% Vehicle Position control task 
     %[Qp, ydotbar] = iCAT_task(uvms.A.v,     uvms.Jv,    Qp, ydotbar, uvms.xdot.v,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vang,     uvms.Jvang,    Qp, ydotbar, uvms.xdot.vang,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vlin,     uvms.Jvlin,    Qp, ydotbar, uvms.xdot.vlin,  0.0001,   0.01, 10); 
 
-    %% Ex 3: "Allignment x_vehicle/rock action" : allignment control task 
-    [Qp, ydotbar] = iCAT_task(uvms.A.xi,     uvms.Jxi,    Qp, ydotbar, uvms.xdot.xi,  0.0001,   0.01, 10);  
+
     
     
     %% Ex 2.1:  "Landing action" : Altitude control task 

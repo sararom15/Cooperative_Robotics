@@ -42,18 +42,18 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
         case 3 %Landing Action
             uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1); 
-            
+            uvms.Aa.xi = zeros(1);
             %if the request is to land mantaining the attitude of the vehicle, then
             %the uvms.Aa.vang should be set as follows: 
             %uvms.Aa.vang = eye(3); 
             
             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
             uvms.Aa.vang = zeros(3,3); 
-            uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time) * eye(3);
+            uvms.Aa.vlin = zeros(3,3);%DecreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(3);
             
             %activate the altitude control task 
-            uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.1, 0, 1, mission.phase_time) * eye(1); 
-            uvms.Aa.xi = eye(1);
+            uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
+
             
             %uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
             
