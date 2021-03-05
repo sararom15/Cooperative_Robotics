@@ -29,34 +29,28 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.min_alt = eye(1); 
             uvms.Aa.ha = eye(1); 
             %uvms.Aa.v = eye(6);
-            
             uvms.Aa.vang = zeros(3); 
             % we want to mantain the goal position 
             uvms.Aa.vlin =  eye(3);
-            
-            uvms.Aa.alt_land = zeros(1); 
             uvms.Aa.xi = eye(1); 
+            uvms.Aa.alt_land = zeros(1); 
             
             %uvms.Aa.t = zeros(6); 
 
         case 3 %Landing Action
             uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1); 
-            uvms.Aa.xi = zeros(1);
+            %uvms.Aa.xi = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+            uvms.Aa.xi = eye(1); 
             %if the request is to land mantaining the attitude of the vehicle, then
             %the uvms.Aa.vang should be set as follows: 
-            %uvms.Aa.vang = eye(3); 
-            
+            %uvms.Aa.vang = eye(3);    
             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
-            uvms.Aa.vang = zeros(3,3); 
-            uvms.Aa.vlin = zeros(3,3);%DecreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(3);
-            
+            uvms.Aa.vang = zeros(3,3);             
+            uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
             %activate the altitude control task 
             uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
-
-            
             %uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
-            
     end 
         
 
@@ -66,17 +60,17 @@ uvms.A.t = eye(6) * uvms.Aa.t;
 %% Ex 1.1: vehicle position control task 
 %%%% Task 1.1: Activation function for vehicle position task 
 %uvms.A.v = eye(6) * uvms.Aa.v;
-uvms.A.vang = eye(3);
-uvms.A.vlin = eye(3); 
-%uvms.A.vang = eye(3) * uvms.Aa.vang; 
-%uvms.A.vlin = eye(3) * uvms.Aa.vlin; 
+%uvms.A.vang = eye(3);
+%uvms.A.vlin = eye(3); 
+uvms.A.vang = eye(3) * uvms.Aa.vang; 
+uvms.A.vlin = eye(3) * uvms.Aa.vlin; 
 %% horizontal attitude control task
 %define a contraint st the z-axis of vehicle frame is always alligned with the z-axis of the world contraint
 %we need to intruduce a bell shape function 
 %if norm(rho) > 0.2, A = 1 
 %if norm(rho) < 0.1, A = 0
-uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho));
-%uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho)) * uvms.Aa.ha; 
+%uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho));
+uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho)) * uvms.Aa.ha; 
 
 %% Ex 1.2: Minimum altitude control task
 %if altitude < uvms.min_dist, A = 1 

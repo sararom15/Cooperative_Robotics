@@ -92,10 +92,10 @@ uvms.Jua = [zeros(6,7), eye(6)];
 rock_center = [12.2025   37.3748  -39.8860]'; % in world frame coordinates
 
 %rock center coordinates projected on x-y plane wrt vehicle frame. 
-v_rockcenter = [1 0 0; 0 1 0; 0 0 0] * uvms.vTw(1:3, 1:3) * rock_center; 
-
-v_iv = [0 1 0]'; 
-
+v_rockcenter = [1 0 0 0; 0 1 0 0; 0 0 0 0] * uvms.vTw * [rock_center; 1]; 
+%take the 
+%v_iv = uvms.vTw(1:3,1:3) * [1 0 0]'; 
+v_iv = [1 0 0]'; 
 % compute the misallignment of these two versor 
 uvms.v_xi = ReducedVersorLemma(v_rockcenter, v_iv); 
 
