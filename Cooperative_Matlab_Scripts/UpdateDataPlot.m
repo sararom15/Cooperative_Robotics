@@ -12,6 +12,9 @@ plt.t(loop) = t;
 plt.toolPos(:, loop) = uvms.wTt(1:3,4);
 
 plt.altitude(:, loop) = uvms.altitude;
+plt.xi(:, loop) = norm(uvms.v_xi); 
+plt.time1 = uvms.time1; 
+plt.time2 = uvms.time2; 
 
 plt.q(:, loop) = uvms.q;
 plt.q_dot(:, loop) = uvms.q_dot;

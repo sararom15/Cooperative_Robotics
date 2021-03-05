@@ -40,14 +40,18 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
         case 3 %Landing Action
             uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1); 
+            
             %uvms.Aa.xi = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+            %mantain the position during the landing 
             uvms.Aa.xi = eye(1); 
+            
             %if the request is to land mantaining the attitude of the vehicle, then
             %the uvms.Aa.vang should be set as follows: 
             %uvms.Aa.vang = eye(3);    
             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
             uvms.Aa.vang = zeros(3,3);             
             uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+            
             %activate the altitude control task 
             uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
             %uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
@@ -66,7 +70,9 @@ uvms.A.vang = eye(3) * uvms.Aa.vang;
 uvms.A.vlin = eye(3) * uvms.Aa.vlin; 
 %% horizontal attitude control task
 %define a contraint st the z-axis of vehicle frame is always alligned with the z-axis of the world contraint
-%we need to intruduce a bell shape function 
+%we need to intruduce a bell shape function because it is an inequality
+%task 
+
 %if norm(rho) > 0.2, A = 1 
 %if norm(rho) < 0.1, A = 0
 %uvms.A.ha = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_rho));
@@ -87,4 +93,5 @@ uvms.A.alt_land = eye(1) * uvms.Aa.alt_land;
 uvms.A.ua = diag([0 0 0 1 0 0]); 
 
 %% Ex 3: Jacobian Allignment x_vehicle/rock 
+%inequality task 
 uvms.A.xi = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_xi)) * uvms.Aa.xi;

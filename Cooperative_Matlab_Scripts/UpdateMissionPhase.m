@@ -10,14 +10,18 @@ function [uvms, mission] = UpdateMissionPhase(uvms, mission)
             if (norm(w_lin) < 0.1) && (norm(w_ang) < 0.1)
                 %switch action
                 mission.phase = 2; 
+                uvms.time1 = mission.phase_time;
                 %update time 
                 mission.phase_time = 0; 
+                
+                
             end 
         case 2  
             %switch to landing action when the vehicle is alligned with the
             %rock 
             if (norm(uvms.v_xi) < 0.1)
                 mission.phase = 3; 
+                uvms.time2 = mission.phase_time; 
                 mission.phase_time = 0; 
             end 
         case 3 

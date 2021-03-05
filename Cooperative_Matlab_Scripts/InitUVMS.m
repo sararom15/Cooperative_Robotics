@@ -23,6 +23,10 @@ buffer = 0.5;
 uvms.max_dist = uvms.min_dist + buffer;
 
 
+%time mission
+uvms.time1 = 0; 
+uvms.time2 = 0; 
+
 % joint limits corresponding to the actual MARIS arm configuration
 uvms.jlmin  = [-2.9;-1.6;-2.9;-2.95;-2.9;-1.65;-2.8];
 uvms.jlmax  = [2.9;1.65;2.9;0.01;2.9;1.25;2.8];
