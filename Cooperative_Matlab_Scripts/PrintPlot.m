@@ -1,6 +1,7 @@
 function [ ] = PrintPlot( plt )
 
 plt.time2 = plt.time1 + plt.time2; 
+plt.time3 = plt.time2 + plt.time3; 
 
 % some predefined plots
 % you can add your own
@@ -46,16 +47,18 @@ set(hplot, 'LineWidth', 2);
 legend('Amu', 'Aha');
 saveas(f, ['Results/' '4.jpg']);
 
-%% Attitude
+%% Altitude
 f = figure('units','normalized','outerposition',[0 0 1 1], 'visible', 'off');
 %figure(6)
 hplot = plot(plt.t, plt.altitude,'b');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [0, 4], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [0, 35], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [0, 4], 'y');
-legend('altitude', 'EndingPhase1', 'EndingPhase2');
+hplot2 = plot([plt.time2, plt.time2], [0, 35], 'y');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [0, 35], 'r');
+legend('altitude', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '5.jpg']);
 
 %% vehicle positions
@@ -69,7 +72,10 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [8, 11], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [8, 11], 'y');
-legend('x','EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [8, 11], 'r');
+legend('x', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
+
 
 subplot(3,3,2);
 ylim([36, 39]);
@@ -79,8 +85,9 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [36, 39], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [36, 39], 'y');
-legend('y','EndingPhase1', 'EndingPhase2');
-
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [36, 39], 'r');
+legend('y', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 subplot(3,3,3);
 ylim([-39,-35.5])
@@ -90,7 +97,10 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [-35.5, -39], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [-35.5, -39], 'y');
-legend('z','EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [-35.5, -39], 'r');
+legend('z', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
+
 
 
 subplot(3,3,4);
@@ -101,7 +111,10 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [0, 0.04], 'g'); 
 hold on;  
 hplot2 = plot([plt.time2, plt.time2], [0, 0.04], 'y');
-legend('roll','EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [0, 0.04], 'r');
+legend('roll', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
+
 
 subplot(3,3,5);
 ylim([-0.06,-0.035]);
@@ -111,7 +124,9 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [-0.035, -0.06], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [-0.035, -0.06], 'y');
-legend('pitch','EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [-0.035, -0.06], 'r');
+legend('pitch', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 subplot(3,3,6);
 ylim([-0.05, 0.6]);
@@ -121,7 +136,9 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [-0.2, 0.6], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [-0.2, 0.6], 'y');
-legend('yaw','EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [-0.2, 0.6], 'r');
+legend('yaw', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '6.jpg']);
 
 %% xi 
@@ -133,7 +150,9 @@ hold on;
 hplot1 = plot([plt.time1, plt.time1], [0, 1], 'g'); 
 hold on; 
 hplot2 = plot([plt.time2, plt.time2], [0, 1], 'y');
-legend('xi', 'EndingPhase1', 'EndingPhase2');
+hold on; 
+hplot3 = plot([plt.time3, plt.time3], [0, 1], 'r');
+legend('xi', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '7.jpg']);
 
 

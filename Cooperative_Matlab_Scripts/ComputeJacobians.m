@@ -110,5 +110,9 @@ end
 %[arms(1,7), ang(1,3), lin(1,3)] 
 uvms.Jxi = [zeros(1,7) zeros(1,3) xi']; 
 
+%% Ex 4.1: null vector 
+uvms.Jnull = [uvms.Jvang; uvms.Jvlin]; 
+%% Ex 4.2: joint limit
+uvms.J.joint_lim = [eye(7), zeros(7,6)];  %We are directly acting on the joint
 
 end

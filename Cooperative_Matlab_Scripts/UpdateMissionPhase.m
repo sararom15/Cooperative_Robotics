@@ -25,7 +25,14 @@ function [uvms, mission] = UpdateMissionPhase(uvms, mission)
                 mission.phase_time = 0; 
             end 
         case 3 
+           if(uvms.sensorDistance < 0.11)
+               mission.phase = 4;
+               uvms.time3 = mission.phase_time; 
+               mission.phase_time = 0;
+           end
            
+        case 4
+            
     end 
                 
 end

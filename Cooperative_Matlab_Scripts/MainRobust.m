@@ -6,7 +6,7 @@ close all
 
 % Simulation variables (integration and final time)
 deltat = 0.005;
-end_time = 60;
+end_time = 90;
 loop = 1;
 maxloops = ceil(end_time/deltat);
 
@@ -97,7 +97,11 @@ for t = 0:deltat:end_time
     %% Ex: Underactuation 
     %[Qp, ydotbar] = iCAT_task(uvms.A.ua,     uvms.Jua,    Qp, ydotbar, uvms.xdot.ua,  0.0001,   0.01, 10);    
 
+    %% Ex.4.2 
+    % Joint limit 
+    %[Qp, ydotbar] = iCAT_task(uvms.A.jl,    uvms.J.jl,    Qp, ydotbar, uvms.xdot.jl,  0.0001,   0.01, 10);
     
+    [Qp, ydotbar] = iCAT_task(uvms.A.null,    uvms.Jnull,    Qp, ydotbar, uvms.xdot.null,  0.0001,   0.01, 10);
     %% Ex 1.2: Minimum altitude control task 
     [Qp, ydotbar] = iCAT_task(uvms.A.min_alt,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.min_alt,  0.0001,   0.01, 10);    
 
@@ -120,7 +124,7 @@ for t = 0:deltat:end_time
     
     
     %% Ex 0 : tool position control task 
-    %[Qp, ydotbar] = iCAT_task(uvms.A.t,    uvms.Jt,    Qp, ydotbar, uvms.xdot.t,  0.0001,   0.01, 10);
+    [Qp, ydotbar] = iCAT_task(uvms.A.t,    uvms.Jt,    Qp, ydotbar, uvms.xdot.t,  0.0001,   0.01, 10);
     
     
     [Qp, ydotbar] = iCAT_task(eye(13),     eye(13),    Qp, ydotbar, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one

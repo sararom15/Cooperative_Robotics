@@ -26,6 +26,7 @@ uvms.max_dist = uvms.min_dist + buffer;
 %time mission
 uvms.time1 = 0; 
 uvms.time2 = 0; 
+uvms.time3 = 0; 
 
 % joint limits corresponding to the actual MARIS arm configuration
 uvms.jlmin  = [-2.9;-1.6;-2.9;-2.95;-2.9;-1.65;-2.8];
@@ -63,6 +64,7 @@ uvms.Jv_v = [];
 uvms.Jalt = []; 
 uvms.Jua = [];
 uvms.Jxi = [];
+uvms.Jnull = [];
 
 uvms.xdot.jl = [];
 uvms.xdot.mu = [];
@@ -75,6 +77,7 @@ uvms.xdot.min_alt = [];
 uvms.xdot.alt_land = []; 
 uvms.xdot.ua = [];
 uvms.xdot.xi = []; 
+uvms.xdot.null = []; 
 
 
 uvms.A.jl = zeros(7,7);
@@ -88,6 +91,7 @@ uvms.A.min_alt = zeros();
 uvms.A.alt_land = zeros(); 
 uvms.A.ua = zeros(6,6); 
 uvms.A.xi = zeros(1,1); 
+uvms.A.null = zeros(6,6);
 
 %uvms.Aa.v = eye(6); 
 uvms.Aa.vlin = eye(3);
@@ -96,6 +100,7 @@ uvms.Aa.ha = eye(1);
 uvms.Aa.t = zeros(6); 
 uvms.Aa.alt_land = zeros(1); 
 uvms.Aa.xi = zeros(1);
+uvms.Aa.null = 0;
 %uvms.A.v_rho = zeros(3,1); 
 
 end

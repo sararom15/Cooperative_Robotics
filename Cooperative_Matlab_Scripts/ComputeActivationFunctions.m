@@ -55,7 +55,24 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             %activate the altitude control task 
             uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
             %uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
+            
+        case 4 %Fix vehicle
+            uvms.Aa.ha = eye(1);
+            uvms.Aa.min_alt = zeros(1);
+            uvms.Aa.xi = zeros(1);   % allignment to the rock
+            uvms.Aa.alt_land = zeros(1);        % landing
+            uvms.Aa.vang = zeros(3,3);    
+            uvms.Aa.vlin = zeros(3,3);
+            
+            % activates the tool movement and the constraint for the
+            % vehicle
+            uvms.Aa.null = IncreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+            uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
+            
+    
+    
     end 
+    
         
 
 %% arm tool position control task 
@@ -95,3 +112,7 @@ uvms.A.ua = diag([0 0 0 1 0 0]);
 %% Ex 3: Jacobian Allignment x_vehicle/rock 
 %inequality task 
 uvms.A.xi = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_xi)) * uvms.Aa.xi;
+
+%% Ex 4.1: Activation Function fix vehicle
+%inequality non-reactive task 
+uvms.A.null =  uvms.Aa.null * eye(6);
