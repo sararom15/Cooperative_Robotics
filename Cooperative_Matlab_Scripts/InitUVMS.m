@@ -22,8 +22,7 @@ uvms.min_dist = 1;
 buffer = 0.5;
 uvms.max_dist = uvms.min_dist + buffer;
 
-
-%time mission
+%time mission for the plots
 uvms.time1 = 0; 
 uvms.time2 = 0; 
 uvms.time3 = 0; 
@@ -59,8 +58,8 @@ uvms.Jt = [];
 uvms.Jv = []; 
 uvms.Jv_a = []; 
 uvms.Jv_v = []; 
-%uvms.Jvlin = []; 
-%uvms.Jvang = []; 
+uvms.Jvlin = []; 
+uvms.Jvang = []; 
 uvms.Jalt = []; 
 uvms.Jua = [];
 uvms.Jxi = [];
@@ -80,7 +79,8 @@ uvms.xdot.xi = [];
 uvms.xdot.null = []; 
 
 
-uvms.A.jl = zeros(7,7);
+
+uvms.A.jl = zeros();
 uvms.A.mu = 0;
 uvms.A.ha = zeros(1,1);
 uvms.A.t = zeros(6,6);
@@ -100,7 +100,9 @@ uvms.Aa.ha = eye(1);
 uvms.Aa.t = zeros(6); 
 uvms.Aa.alt_land = zeros(1); 
 uvms.Aa.xi = zeros(1);
+uvms.Aa.min_alt = zeros(1); 
 uvms.Aa.null = 0;
+uvms.Aa.jl = zeros(); 
 %uvms.A.v_rho = zeros(3,1); 
 
 end

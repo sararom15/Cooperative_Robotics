@@ -55,6 +55,7 @@ uvms.q = [-0.0031 0 0.0128 -1.2460 0.0137 0.0853-pi/2 0.0137]';
 % R(rot_x, rot_y, rot_z) = Rz (rot_z) * Ry(rot_y) * Rx(rot_x)
 uvms.p = [8.5 38.5 -36 0 -0.06 0.5]'; 
 
+
 %% Ex 0 : define the goal position for the tool position task 
 % defines the goal position (wrt world frame) for the end-effector/tool position task
 uvms.goalPosition = [12.2025   37.3748  -39.8860]';
@@ -97,19 +98,17 @@ for t = 0:deltat:end_time
     %% Ex: Underactuation 
     %[Qp, ydotbar] = iCAT_task(uvms.A.ua,     uvms.Jua,    Qp, ydotbar, uvms.xdot.ua,  0.0001,   0.01, 10);    
 
-    %% Ex.4.2 
-    % Joint limit 
-    %[Qp, ydotbar] = iCAT_task(uvms.A.jl,    uvms.J.jl,    Qp, ydotbar, uvms.xdot.jl,  0.0001,   0.01, 10);
-    
-    [Qp, ydotbar] = iCAT_task(uvms.A.null,    uvms.Jnull,    Qp, ydotbar, uvms.xdot.null,  0.0001,   0.01, 10);
-    %% Ex 1.2: Minimum altitude control task 
+    %% Ex 4.2: Joint limit control task (safety task) 
+    [Qp, ydotbar] = iCAT_task(uvms.A.jl,    uvms.J.jl,    Qp, ydotbar, uvms.xdot.jl,  0.0001,   0.01, 10);
+
+    %% Ex 1.2: Minimum altitude control task (safety task) 
     [Qp, ydotbar] = iCAT_task(uvms.A.min_alt,     uvms.Jalt,    Qp, ydotbar, uvms.xdot.min_alt,  0.0001,   0.01, 10);    
 
-    %% Ex 1.1 
-    %%%% Horizontal Attitude control task with higher priority than Postion control task  
+    %% Ex 1.1.1: Horizontal Attitude control task (safety task) 
+    %%%% Horizontal Attitude control task with higher priority than Postion
     [Qp, ydotbar] = iCAT_task(uvms.A.ha,     uvms.Jha,    Qp, ydotbar, uvms.xdot.ha,  0.0001,   0.01, 10);    
     
-    %%%% Vehicle Position control task 
+    %% Ex 1.1.2: "Safe Navigation aciton": Vehicle Position control task 
     %[Qp, ydotbar] = iCAT_task(uvms.A.v,     uvms.Jv,    Qp, ydotbar, uvms.xdot.v,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vang,     uvms.Jvang,    Qp, ydotbar, uvms.xdot.vang,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vlin,     uvms.Jvlin,    Qp, ydotbar, uvms.xdot.vlin,  0.0001,   0.01, 10); 
@@ -122,10 +121,12 @@ for t = 0:deltat:end_time
     %% Ex 3: "Allignment x_vehicle/rock action" : allignment control task 
     [Qp, ydotbar] = iCAT_task(uvms.A.xi,     uvms.Jxi,    Qp, ydotbar, uvms.xdot.xi,  0.0001,   0.01, 10);  
     
-    
+
+    %% Ex 4.1: Vehicle Null velocity non-reactive control task 
+    [Qp, ydotbar] = iCAT_task(uvms.A.null,    uvms.Jnull,    Qp, ydotbar, uvms.xdot.null,  0.0001,   0.01, 10);
+
     %% Ex 0 : tool position control task 
     [Qp, ydotbar] = iCAT_task(uvms.A.t,    uvms.Jt,    Qp, ydotbar, uvms.xdot.t,  0.0001,   0.01, 10);
-    
     
     [Qp, ydotbar] = iCAT_task(eye(13),     eye(13),    Qp, ydotbar, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
     
@@ -138,8 +139,8 @@ for t = 0:deltat:end_time
     uvms.q = uvms.q + uvms.q_dot*deltat;
     % beware: p_dot should be projected on <v>
     
-    % disturbance 
-    %%%%%%%%%%%%%%%%%
+    % disturbance for roll angle 
+    %uvms.p_dot(4) = 0.5*sin(2*pi*0.5*t); 
     
     uvms.p = integrate_vehicle(uvms.p, uvms.p_dot, deltat);
     

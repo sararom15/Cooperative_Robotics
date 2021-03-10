@@ -65,15 +65,15 @@ saveas(f, ['Results/' '5.jpg']);
 f = figure('units','normalized','outerposition',[0 0 1 1], 'visible', 'off');
 %figure(2);
 subplot(3,3,1);
-ylim([8, 11])
+ylim([5, 11])
 hplot = plot(plt.t, plt.p(1,:),'b');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [8, 11], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [0, 20], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [8, 11], 'y');
+hplot2 = plot([plt.time2, plt.time2], [0, 20], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [8, 11], 'r');
+hplot3 = plot([plt.time3, plt.time3], [0, 20], 'r');
 legend('x', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 
@@ -82,50 +82,50 @@ ylim([36, 39]);
 hplot = plot(plt.t, plt.p(2,:),'m');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [36, 39], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [30, 45], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [36, 39], 'y');
+hplot2 = plot([plt.time2, plt.time2], [30, 45], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [36, 39], 'r');
+hplot3 = plot([plt.time3, plt.time3], [30, 45], 'r');
 legend('y', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 subplot(3,3,3);
-ylim([-39,-35.5])
+ylim([-40,-36])
 hplot = plot(plt.t, plt.p(3,:),'c');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [-35.5, -39], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [-60, -10], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [-35.5, -39], 'y');
+hplot2 = plot([plt.time2, plt.time2], [-60, -10], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [-35.5, -39], 'r');
+hplot3 = plot([plt.time3, plt.time3], [-60, -10], 'r');
 legend('z', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 
 
 subplot(3,3,4);
-ylim([0, 0.04]);
+ylim([0, 0.4]);
 hplot = plot(plt.t, plt.p(4,:),'k');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [0, 0.04], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [-0.01, 0.4], 'g'); 
 hold on;  
-hplot2 = plot([plt.time2, plt.time2], [0, 0.04], 'y');
+hplot2 = plot([plt.time2, plt.time2], [-0.01, 0.4], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [0, 0.04], 'r');
+hplot3 = plot([plt.time3, plt.time3], [-0.01, 0.4], 'r');
 legend('roll', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 
 subplot(3,3,5);
-ylim([-0.06,-0.035]);
+ylim([-0.06,-0.05]);
 hplot = plot(plt.t, plt.p(5,:),'r');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [-0.035, -0.06], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [-0.1, 0.1], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [-0.035, -0.06], 'y');
+hplot2 = plot([plt.time2, plt.time2], [-0.1, 0.1], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [-0.035, -0.06], 'r');
+hplot3 = plot([plt.time3, plt.time3], [-0.1, 0.1], 'r');
 legend('pitch', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 
 subplot(3,3,6);
@@ -133,11 +133,11 @@ ylim([-0.05, 0.6]);
 hplot = plot(plt.t, plt.p(6,:),'g');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [-0.2, 0.6], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [-0.5, 1], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [-0.2, 0.6], 'y');
+hplot2 = plot([plt.time2, plt.time2], [-0.5, 1], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [-0.2, 0.6], 'r');
+hplot3 = plot([plt.time3, plt.time3], [-0.5, 1], 'r');
 legend('yaw', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '6.jpg']);
 

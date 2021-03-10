@@ -10,23 +10,28 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
 % ymin, if x < xmin
 % ymax, if x > xmax
 
-%% Mission 
+%%uvms.Aa. _ = let the task be activated: if it is 1 the activation
+%%function of the task will run. 
+
+%% Missions
     switch mission.phase
         case 1 %Safe Navigation Action 
             uvms.Aa.min_alt = eye(1); 
+            uvms.Aa.jl = eye(1); 
             uvms.Aa.ha = eye(1); 
             %uvms.Aa.v = eye(6);
-            
             uvms.Aa.vang = eye(3); 
-            uvms.Aa.vlin = eye(3); 
-            
+            uvms.Aa.vlin = eye(3);             
             uvms.Aa.alt_land = zeros(1); 
             uvms.Aa.xi = zeros(1);
-            
+            uvms.Aa.null = zeros(6); 
             uvms.Aa.t = zeros(6); 
+
+        
             
-        case 2 
+        case 2 %Allignment vehicle/rock Action 
             uvms.Aa.min_alt = eye(1); 
+            uvms.Aa.jl = eye(1); 
             uvms.Aa.ha = eye(1); 
             %uvms.Aa.v = eye(6);
             uvms.Aa.vang = zeros(3); 
@@ -34,14 +39,14 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.vlin =  eye(3);
             uvms.Aa.xi = eye(1); 
             uvms.Aa.alt_land = zeros(1); 
+            uvms.Aa.null = zeros(6); 
+            uvms.Aa.t = zeros(6); 
             
-            %uvms.Aa.t = zeros(6); 
-
+            
         case 3 %Landing Action
             uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1); 
-            
-            %uvms.Aa.xi = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+            uvms.Aa.jl = eye(1); 
             %mantain the position during the landing 
             uvms.Aa.xi = eye(1); 
             
@@ -49,14 +54,17 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             %the uvms.Aa.vang should be set as follows: 
             %uvms.Aa.vang = eye(3);    
             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
-            uvms.Aa.vang = zeros(3,3);             
+            uvms.Aa.vang = zeros(3,3);  
+            uvms.Aa.null = zeros(6); 
             uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
             
             %activate the altitude control task 
             uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
-            %uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
+            uvms.Aa.t = zeros(6);
+
             
-        case 4 %Fix vehicle
+        case 4 %Fixed-base Manipulation Action
+            uvms.Aa.jl = eye(1); 
             uvms.Aa.ha = eye(1);
             uvms.Aa.min_alt = zeros(1);
             uvms.Aa.xi = zeros(1);   % allignment to the rock
@@ -65,17 +73,16 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.vlin = zeros(3,3);
             
             % activates the tool movement and the constraint for the
-            % vehicle
+            % vehicle and for the joint
             uvms.Aa.null = IncreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
             uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
-            
-    
+
     
     end 
     
         
 
-%% arm tool position control task 
+%% Ex 0: arm tool position control task 
 uvms.A.t = eye(6) * uvms.Aa.t;
 
 %% Ex 1.1: vehicle position control task 
@@ -109,10 +116,17 @@ uvms.A.alt_land = eye(1) * uvms.Aa.alt_land;
 %% Ex : activation function for underactuated control task 
 uvms.A.ua = diag([0 0 0 1 0 0]); 
 
-%% Ex 3: Jacobian Allignment x_vehicle/rock 
+%% Ex 3:  Allignment x_vehicle/rock Control task 
 %inequality task 
 uvms.A.xi = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_xi)) * uvms.Aa.xi;
 
-%% Ex 4.1: Activation Function fix vehicle
-%inequality non-reactive task 
-uvms.A.null =  uvms.Aa.null * eye(6);
+%% Ex 4.1: Vehicle Null Velocity control task 
+% non-reactive task 
+uvms.A.null =  eye(6) * uvms.Aa.null;
+
+%% Ex 4.2: Joint limit control task 
+for i = 1:length(uvms.q) 
+    uvms.A.jl(i,i) = (DecreasingBellShapedFunction(uvms.jlmin(i), uvms.jlmin(i) + 0.1, 0, 1, uvms.q(i)) + IncreasingBellShapedFunction(uvms.jlmax(i) - 0.1, uvms.jlmax(i), 0, 1, uvms.q(i))) * uvms.Aa.jl;  
+end 
+
+

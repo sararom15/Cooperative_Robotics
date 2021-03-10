@@ -52,11 +52,11 @@ uvms.xdot.alt_land = coeff_velocity * (0.1 - uvms.altitude);
 uvms.xdot.alt_land = Saturate(uvms.xdot.alt_land, 0.2); 
 
 
-%% Ex: Simulation 4 reference rate for underactuated
+%% Ex: Simulation 4: reference rate for underactuated control task 
 % I want a feedback of the velocity. 
 uvms.xdot.ua = uvms.p_dot; 
 
-%% Ex 3: Jacobian Allignment x_vehicle/rock 
+%% Ex 3: Reference for Allignment x_vehicle/rock control task
 % 0.4 as coeff velocity to be faster. 
 %uvms.xdot.xi = 0.05*(0-norm(uvms.v_xi));
 uvms.xdot.xi = 0.5*(0-norm(uvms.v_xi));
@@ -64,6 +64,19 @@ uvms.xdot.xi = 0.5*(0-norm(uvms.v_xi));
 uvms.xdot.xi = Saturate(uvms.xdot.xi, 0.2); 
 
 
-%% Ex 4: Jacobian null
+%% Ex 4.1: Reference for vehicle null velocity control task 
 uvms.xdot.null = zeros(6,1);
-uvms.xdot.null; 
+%uvms.xdot.null; 
+
+%% Ex4.2: Reference for joint limit control task 
+%impose a velocity such that is in the middle between the max and the min
+%values 
+for i = 1:length(uvms.q) 
+    uvms.mean(i) = (uvms.jlmin(i) + uvms.jlmax(i))/2; 
+    uvms.xdot.jl(i,1)= 0.2*Saturate(uvms.mean(i)-uvms.q(i), 0.2);
+    
+end 
+    
+    
+
+
