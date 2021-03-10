@@ -14,17 +14,17 @@ uvms.xdot.t(4:6) = Saturate(uvms.xdot.t(4:6), 0.2);
 %% Ex 1.1: reference for vehicle position control task 
 %%%%  Compute the reference for vehicle position control task 
 % Compute the Cartesian error between the goal frame and the vehicle frame with respect to the world frame
-%[w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
+[w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
 
 %attitude vehicle control task 
-%uvms.xdot.vang = Saturate(0.2 * w_ang, 0.3); 
+uvms.xdot.vang = Saturate(0.2 * w_ang, 0.3); 
 
 %position vehicle control task 
-%uvms.xdot.vlin = Saturate(0.2 * w_lin, 0.3);
+uvms.xdot.vlin = Saturate(0.2 * w_lin, 0.3);
 
-%uvms.xdot.v= 0.2*[w_lin; w_ang]; 
-%uvms.xdot.v(1:3)=Saturate(uvms.xdot.v(1:3),0.2);
-%uvms.xdot.v(4:6)=Saturate(uvms.xdot.v(4:6),0.2);
+uvms.xdot.v= 0.2*[w_lin; w_ang]; 
+uvms.xdot.v(1:3)=Saturate(uvms.xdot.v(1:3),0.2);
+uvms.xdot.v(4:6)=Saturate(uvms.xdot.v(4:6),0.2);
 
 %% reference for horizontal attitude
 uvms.xdot.ha = 0.2*(0-norm(uvms.v_rho));

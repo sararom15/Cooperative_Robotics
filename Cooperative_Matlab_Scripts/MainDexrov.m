@@ -6,7 +6,7 @@ close all
 
 % Simulation variables (integration and final time)
 deltat = 0.005;
-end_time = 15;
+end_time = 60;
 loop = 1;
 maxloops = ceil(end_time/deltat);
 
@@ -54,6 +54,11 @@ uvms.goalPosition = pipe_center + (pipe_radius + distanceGoalWrtPipe)*[0 0 1]';
 uvms.wRg = rotation(pi,0,0);
 uvms.wTg = [uvms.wRg uvms.goalPosition; 0 0 0 1];
 
+% Vehicle goal
+uvms.v_goalPosition=[pipe_center(1),pipe_center(2),pipe_center(3)+1.5]';
+uvms.wRgv = rotation(0,0,-pi/2);
+uvms.wTgv = [uvms.wRgv uvms.v_goalPosition; 0 0 0 1];
+
 % defines the tool control point
 uvms.eTt = eye(4);
 tic
@@ -70,10 +75,40 @@ for t = 0:deltat:end_time
     Qp = eye(13); 
     % add all the other tasks here!
     % the sequence of iCAT_task calls defines the priority
-    %[Qp, rhop] = iCAT_task(uvms.A.mu,   uvms.Jmu,   Qp, rhop, uvms.xdot.mu, 0.000001, 0.0001, 10);
-    [Qp, rhop] = iCAT_task(uvms.A.ha,   uvms.Jha,   Qp, rhop, uvms.xdot.ha, 0.0001,   0.01, 10);
-    [Qp, rhop] = iCAT_task(uvms.A.t,    uvms.Jt,    Qp, rhop, uvms.xdot.t,  0.0001,   0.01, 10);
+    
+
+
+    %% Joint limit control task (safety task)
+    [Qp, rhop] = iCAT_task(uvms.A.jl, uvms.J.jl, Qp, rhop, uvms.xdot.jl, 0.0001, 0.01, 10);
+
+
+
+    %% Minimum altitude control task (safety task)
+    [Qp, rhop] = iCAT_task(uvms.A.min_alt, uvms.Jalt, Qp, rhop, uvms.xdot.min_alt, 0.0001, 0.01, 10);
+
+    %% Horizontal Attitude control task (safety task)
+    [Qp, rhop] = iCAT_task(uvms.A.ha, uvms.Jha, Qp, rhop, uvms.xdot.ha, 0.0001, 0.01, 10);
+
+    %% "Safe Navigation action": Vehicle Position control task
+    [Qp, rhop] = iCAT_task(uvms.A.vang, uvms.Jvang, Qp, rhop, uvms.xdot.vang, 0.0001, 0.01, 10);
+    [Qp, rhop] = iCAT_task(uvms.A.vlin, uvms.Jvlin, Qp, rhop, uvms.xdot.vlin, 0.0001, 0.01, 10);
+
+    %% "Landing action" : Altitude control task
+    % control task to regulate the altitude to zero
+    %[Qp, rhop] = iCAT_task(uvms.A.alt_land, uvms.Jalt, Qp, rhop, uvms.xdot.alt_land, 0.0001, 0.01, 10);
+
+    %% "Allignment x_vehicle/rock action" : allignment control task
+    %[Qp, rhop] = iCAT_task(uvms.A.xi, uvms.Jxi, Qp, rhop, uvms.xdot.xi, 0.0001, 0.01, 10);
+
+    %% Vehicle Null velocity non-reactive control task
+    [Qp, rhop] = iCAT_task(uvms.A.null, uvms.Jnull, Qp, rhop, uvms.xdot.null, 0.0001, 0.01, 10);
+
+    %% Tool position control task
+    [Qp, rhop] = iCAT_task(uvms.A.t, uvms.Jt, Qp, rhop, uvms.xdot.t, 0.0001, 0.01, 10);
+    
+    %% Preferred configuration (first four joints)
     [Qp, rhop] = iCAT_task(uvms.A.PreferredConfig,    uvms.JPreferredConfig,    Qp, rhop, uvms.xdot.PreferredConfig,  0.0001,   0.01, 10);
+
     [Qp, rhop] = iCAT_task(eye(13),     eye(13),    Qp, rhop, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
     
     % get the two variables for integration
@@ -97,7 +132,7 @@ for t = 0:deltat:end_time
    
     % add debug prints here
     if (mod(t,0.1) == 0)
-        %t
+        t
         %uvms.p'
         uvms.q(1:4)
     end

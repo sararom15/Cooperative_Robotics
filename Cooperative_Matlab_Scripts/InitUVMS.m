@@ -1,5 +1,13 @@
 function [uvms] = InitUVMS(robotname)
 
+%%%%%%%%%%%%%%%%%%%%%
+wuRw = rotation(0,-pi/2,pi/2);
+u_pipe_center = [-10.66 31.47 -1.94]'; % in unity coordinates
+pipe_center = wuRw'*u_pipe_center;     % in world frame coordinates
+pipe_radius = 0.3;
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
 % uvms.vTb
 % transformation matrix betwene the arm base wrt vehicle frame
 % expresses how the base of the arm is attached to the vehicle
@@ -18,9 +26,8 @@ uvms.q_dot = [0 0 0 0 0 0 0]';
 uvms.p_dot = [0 0 0 0 0 0]';
 
 % Constants for the minimum altitude control task
-uvms.min_dist = 1;
-buffer = 0.5;
-uvms.max_dist = uvms.min_dist + buffer;
+uvms.min_dist = pipe_center(3) - 3 * pipe_radius; 
+uvms.max_dist = uvms.min_dist + pipe_radius;
 
 %time mission for the plots
 uvms.time1 = 0; 
@@ -106,7 +113,7 @@ uvms.Aa.ha = eye(1);
 uvms.Aa.t = zeros(6); 
 uvms.Aa.alt_land = zeros(1); 
 uvms.Aa.xi = zeros(1);
-uvms.Aa.min_alt = zeros(1); 
+uvms.Aa.min_alt = zeros(); 
 uvms.Aa.null = 0;
 uvms.Aa.jl = zeros(); 
 %uvms.A.v_rho = zeros(3,1); 

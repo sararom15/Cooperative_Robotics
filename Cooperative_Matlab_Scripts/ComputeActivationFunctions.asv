@@ -124,7 +124,7 @@ for i = 1:length(uvms.q)
     uvms.A.jl(i,i) = (DecreasingBellShapedFunction(uvms.jlmin(i), uvms.jlmin(i) + 0.1, 0, 1, uvms.q(i)) + IncreasingBellShapedFunction(uvms.jlmax(i) - 0.1, uvms.jlmax(i), 0, 1, uvms.q(i))) * uvms.Aa.jl;  
 end 
 
-%% Ex 5.1: Preferred configuration (first four joints)
+%% Ex 5.1: Preferred configuration (
 diff = uvms.PreferredConfig - uvms.q(1:length(uvms.PreferredConfig));
 for i = 1:length(uvms.PreferredConfig)
    uvms.A.PreferredConfig(i, i) = IncreasingBellShapedFunction(uvms.PreferredConfig(i) - 0.1, uvms.PreferredConfig(i),0,1,norm(diff(i)));
