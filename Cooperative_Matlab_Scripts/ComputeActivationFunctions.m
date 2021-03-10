@@ -16,66 +16,67 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
 %% Missions
     switch mission.phase
         case 1 %Safe Navigation Action 
-            uvms.Aa.min_alt = eye(1); 
+            %uvms.Aa.min_alt = eye(1); 
             uvms.Aa.jl = eye(1); 
             uvms.Aa.ha = eye(1); 
             %uvms.Aa.v = eye(6);
-            uvms.Aa.vang = eye(3); 
-            uvms.Aa.vlin = eye(3);             
-            uvms.Aa.alt_land = zeros(1); 
+            %uvms.Aa.vang = eye(3); 
+            %uvms.Aa.vlin = eye(3);             
+            %uvms.Aa.alt_land = zeros(1); 
             uvms.Aa.xi = zeros(1);
-            uvms.Aa.null = zeros(6); 
+            %uvms.Aa.null = zeros(6); 
             uvms.Aa.t = zeros(6); 
+            uvms.Aa.PreferredConfig=eye(4);
 
-        
-            
-        case 2 %Allignment vehicle/rock Action 
-            uvms.Aa.min_alt = eye(1); 
-            uvms.Aa.jl = eye(1); 
-            uvms.Aa.ha = eye(1); 
-            %uvms.Aa.v = eye(6);
-            uvms.Aa.vang = zeros(3); 
-            % we want to mantain the goal position 
-            uvms.Aa.vlin =  eye(3);
-            uvms.Aa.xi = eye(1); 
-            uvms.Aa.alt_land = zeros(1); 
-            uvms.Aa.null = zeros(6); 
-            uvms.Aa.t = zeros(6); 
-            
-            
-        case 3 %Landing Action
-            uvms.Aa.ha = eye(1);
-            uvms.Aa.min_alt = zeros(1); 
-            uvms.Aa.jl = eye(1); 
-            %mantain the position during the landing 
-            uvms.Aa.xi = eye(1); 
-            
-            %if the request is to land mantaining the attitude of the vehicle, then
-            %the uvms.Aa.vang should be set as follows: 
-            %uvms.Aa.vang = eye(3);    
-            %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
-            uvms.Aa.vang = zeros(3,3);  
-            uvms.Aa.null = zeros(6); 
-            uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
-            
-            %activate the altitude control task 
-            uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
-            uvms.Aa.t = zeros(6);
-
-            
-        case 4 %Fixed-base Manipulation Action
-            uvms.Aa.jl = eye(1); 
-            uvms.Aa.ha = eye(1);
-            uvms.Aa.min_alt = zeros(1);
-            uvms.Aa.xi = zeros(1);   % allignment to the rock
-            uvms.Aa.alt_land = zeros(1);        % landing
-            uvms.Aa.vang = zeros(3,3);    
-            uvms.Aa.vlin = zeros(3,3);
-            
-            % activates the tool movement and the constraint for the
-            % vehicle and for the joint
-            uvms.Aa.null = IncreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
-            uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
+         
+%             
+%         case 2 %Allignment vehicle/rock Action 
+%             uvms.Aa.min_alt = eye(1); 
+%             uvms.Aa.jl = eye(1); 
+%             uvms.Aa.ha = eye(1); 
+%             %uvms.Aa.v = eye(6);
+%             uvms.Aa.vang = zeros(3); 
+%             % we want to mantain the goal position 
+%             uvms.Aa.vlin =  eye(3);
+%             uvms.Aa.xi = eye(1); 
+%             uvms.Aa.alt_land = zeros(1); 
+%             uvms.Aa.null = zeros(6); 
+%             uvms.Aa.t = zeros(6); 
+%             
+%             
+%         case 3 %Landing Action
+%             uvms.Aa.ha = eye(1);
+%             uvms.Aa.min_alt = zeros(1); 
+%             uvms.Aa.jl = eye(1); 
+%             %mantain the position during the landing 
+%             uvms.Aa.xi = eye(1); 
+%             
+%             %if the request is to land mantaining the attitude of the vehicle, then
+%             %the uvms.Aa.vang should be set as follows: 
+%             %uvms.Aa.vang = eye(3);    
+%             %otherwise deactivate the vehicle position control task and the vehicle attitude control task  as follows: 
+%             uvms.Aa.vang = zeros(3,3);  
+%             uvms.Aa.null = zeros(6); 
+%             uvms.Aa.vlin = DecreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+%             
+%             %activate the altitude control task 
+%             uvms.Aa.alt_land = IncreasingBellShapedFunction(0, 0.05, 0, 1, mission.phase_time) * eye(1); 
+%             uvms.Aa.t = zeros(6);
+% 
+%             
+%         case 4 %Fixed-base Manipulation Action
+%             uvms.Aa.jl = eye(1); 
+%             uvms.Aa.ha = eye(1);
+%             uvms.Aa.min_alt = zeros(1);
+%             uvms.Aa.xi = zeros(1);   % allignment to the rock
+%             uvms.Aa.alt_land = zeros(1);        % landing
+%             uvms.Aa.vang = zeros(3,3);    
+%             uvms.Aa.vlin = zeros(3,3);
+%             
+%             % activates the tool movement and the constraint for the
+%             % vehicle and for the joint
+%             uvms.Aa.null = IncreasingBellShapedFunction(0, 0.2, 0, 1, mission.phase_time);
+%             uvms.Aa.t = IncreasingBellShapedFunction(0, 2, 0, 1, mission.phase_time) * eye(6); 
 
     
     end 
@@ -129,4 +130,9 @@ for i = 1:length(uvms.q)
     uvms.A.jl(i,i) = (DecreasingBellShapedFunction(uvms.jlmin(i), uvms.jlmin(i) + 0.1, 0, 1, uvms.q(i)) + IncreasingBellShapedFunction(uvms.jlmax(i) - 0.1, uvms.jlmax(i), 0, 1, uvms.q(i))) * uvms.Aa.jl;  
 end 
 
-
+%% Ex 5.1 
+diff = uvms.PreferredConfig - uvms.q(1:length(uvms.PreferredConfig));
+for i = 1:length(uvms.PreferredConfig)
+   uvms.A.PreferredConfig(i, i) = IncreasingBellShapedFunction(uvms.PreferredConfig(i) - 0.1, uvms.PreferredConfig(i),0,1,norm(diff(i)));
+end
+uvms.A.PreferredConfig = uvms.A.PreferredConfig * uvms.Aa.PreferredConfig;

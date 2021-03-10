@@ -82,11 +82,7 @@ uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv;
 % Jmatrix-->[1x13]
 %% Ex 2.1: "Landing action" : reference for altitude control task 
 % control task to regulate the altitude to zero
-% Since the motion to control is on the z axis of the vehi
-
-
-
-cle, we can
+% Since the motion to control is on the z axis of the vehicle, we can
 % implement the same Jacobian of the previous ex (1.2) 
 
 %% Ex: Jacobian for underactuated control task 
@@ -118,5 +114,9 @@ uvms.Jxi = [zeros(1,7) zeros(1,3) xi'];
 uvms.Jnull = [uvms.Jvang; uvms.Jvlin]; 
 %% Ex 4.2: joint limit
 uvms.J.jl = [eye(7), zeros(7,6)];  %We are directly acting on the joint
+
+
+%% Ex 5.1 
+uvms.J.PreferredConfig = [eye(4), zeros(4,3), zeros(4,6)];
 
 end

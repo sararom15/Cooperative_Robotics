@@ -31,6 +31,11 @@ uvms.time3 = 0;
 uvms.jlmin  = [-2.9;-1.6;-2.9;-2.95;-2.9;-1.65;-2.8];
 uvms.jlmax  = [2.9;1.65;2.9;0.01;2.9;1.25;2.8];
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preferred configuration (we consider here that joints are in the right 
+% order and from the first joint)
+uvms.PreferredConfig = [-0.0031, 1.2586, -0.0128, -1.2460]';
+
 % to be computed at each time step
 uvms.wTv = eye(4,4);
 uvms.wTt = eye(4,4);
@@ -64,6 +69,7 @@ uvms.Jalt = [];
 uvms.Jua = [];
 uvms.Jxi = [];
 uvms.Jnull = [];
+uvms.JPreferredConfig = [];
 
 uvms.xdot.jl = [];
 uvms.xdot.mu = [];
@@ -77,8 +83,7 @@ uvms.xdot.alt_land = [];
 uvms.xdot.ua = [];
 uvms.xdot.xi = []; 
 uvms.xdot.null = []; 
-
-
+uvms.xdot.PreferredConfig = []; 
 
 uvms.A.jl = zeros();
 uvms.A.mu = 0;
@@ -92,6 +97,7 @@ uvms.A.alt_land = zeros();
 uvms.A.ua = zeros(6,6); 
 uvms.A.xi = zeros(1,1); 
 uvms.A.null = zeros(6,6);
+uvms.A.PreferredConfig = zeros(4);
 
 %uvms.Aa.v = eye(6); 
 uvms.Aa.vlin = eye(3);
@@ -104,6 +110,7 @@ uvms.Aa.min_alt = zeros(1);
 uvms.Aa.null = 0;
 uvms.Aa.jl = zeros(); 
 %uvms.A.v_rho = zeros(3,1); 
+uvms.Aa.PreferredConfig=zeros(4);
 
 end
 
