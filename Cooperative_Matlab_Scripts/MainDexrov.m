@@ -54,9 +54,15 @@ uvms.goalPosition = pipe_center + (pipe_radius + distanceGoalWrtPipe)*[0 0 1]';
 uvms.wRg = rotation(pi,0,0);
 uvms.wTg = [uvms.wRg uvms.goalPosition; 0 0 0 1];
 
-% Vehicle goal
-uvms.v_goalPosition=[pipe_center(1),pipe_center(2),pipe_center(3)+1.5]';
-uvms.wRgv = rotation(0,0,-pi/2);
+% Vehicle goal position 
+%uvms.v_goalPosition=[pipe_center(1), pipe_center(2)-1, pipe_center(3)+1.35]';
+
+% the goal has defined trying the simulation without null vehicle
+% velocities task and taking the final configuration position of the
+% vehicle when the tool has reached its goal position. 
+
+uvms.v_goalPosition = [-2.3, 10.1, -29.8]'; 
+uvms.wRgv = rotation(0,0.06,-pi/2);
 uvms.wTgv = [uvms.wRgv uvms.v_goalPosition; 0 0 0 1];
 
 % defines the tool control point
@@ -81,8 +87,6 @@ for t = 0:deltat:end_time
     %% Joint limit control task (safety task)
     [Qp, rhop] = iCAT_task(uvms.A.jl, uvms.J.jl, Qp, rhop, uvms.xdot.jl, 0.0001, 0.01, 10);
 
-
-
     %% Minimum altitude control task (safety task)
     [Qp, rhop] = iCAT_task(uvms.A.min_alt, uvms.Jalt, Qp, rhop, uvms.xdot.min_alt, 0.0001, 0.01, 10);
 
@@ -93,13 +97,6 @@ for t = 0:deltat:end_time
     [Qp, rhop] = iCAT_task(uvms.A.vang, uvms.Jvang, Qp, rhop, uvms.xdot.vang, 0.0001, 0.01, 10);
     [Qp, rhop] = iCAT_task(uvms.A.vlin, uvms.Jvlin, Qp, rhop, uvms.xdot.vlin, 0.0001, 0.01, 10);
 
-    %% "Landing action" : Altitude control task
-    % control task to regulate the altitude to zero
-    %[Qp, rhop] = iCAT_task(uvms.A.alt_land, uvms.Jalt, Qp, rhop, uvms.xdot.alt_land, 0.0001, 0.01, 10);
-
-    %% "Allignment x_vehicle/rock action" : allignment control task
-    %[Qp, rhop] = iCAT_task(uvms.A.xi, uvms.Jxi, Qp, rhop, uvms.xdot.xi, 0.0001, 0.01, 10);
-
     %% Vehicle Null velocity non-reactive control task
     [Qp, rhop] = iCAT_task(uvms.A.null, uvms.Jnull, Qp, rhop, uvms.xdot.null, 0.0001, 0.01, 10);
 
@@ -108,7 +105,7 @@ for t = 0:deltat:end_time
     
     %% Preferred configuration (first four joints)
     [Qp, rhop] = iCAT_task(uvms.A.PreferredConfig,    uvms.JPreferredConfig,    Qp, rhop, uvms.xdot.PreferredConfig,  0.0001,   0.01, 10);
-
+    %%
     [Qp, rhop] = iCAT_task(eye(13),     eye(13),    Qp, rhop, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
     
     % get the two variables for integration
@@ -135,6 +132,10 @@ for t = 0:deltat:end_time
         t
         %uvms.p'
         uvms.q(1:4)
+        mission.phase
+        uvms.p
+
+        
     end
     
     % enable this to have the simulation approximately evolving like real

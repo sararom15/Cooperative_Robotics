@@ -111,7 +111,7 @@ end
 uvms.Jxi = [zeros(1,7) zeros(1,3) xi']; 
 
 %% Ex 4.1: null vector 
-uvms.Jnull = [uvms.Jvang; uvms.Jvlin]; 
+uvms.Jnull = [uvms.Jvlin; uvms.Jvang]; 
 
 %% Ex 4.2: joint limit
 uvms.J.jl = [eye(7), zeros(7,6)];  %We are directly acting on the joint

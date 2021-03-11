@@ -10,6 +10,10 @@ function [ plt ] = UpdateDataPlot( plt, uvms, t, loop )
 plt.t(loop) = t;
 
 plt.toolPos(:, loop) = uvms.wTt(1:3,4);
+plt.goalTool = uvms.goalPosition; 
+plt.jlmin = uvms.jlmin; 
+plt.jlmax = uvms.jlmax; 
+
 
 plt.altitude(:, loop) = uvms.altitude;
 plt.xi(:, loop) = norm(uvms.v_xi); 

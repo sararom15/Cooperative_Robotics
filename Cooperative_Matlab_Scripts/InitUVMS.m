@@ -82,7 +82,6 @@ uvms.xdot.jl = [];
 uvms.xdot.mu = [];
 uvms.xdot.ha = [];
 uvms.xdot.t = [];
-%uvms.xdot.v = [];
 uvms.xdot.vlin = []; 
 uvms.xdot.vang = []; 
 uvms.xdot.min_alt = []; 
@@ -106,17 +105,16 @@ uvms.A.xi = zeros(1,1);
 uvms.A.null = zeros(6,6);
 uvms.A.PreferredConfig = zeros(4);
 
-%uvms.Aa.v = eye(6); 
-uvms.Aa.vlin = eye(3);
-uvms.Aa.vang = eye(3);
-uvms.Aa.ha = eye(1); 
+
+uvms.Aa.vlin = zeros(3);
+uvms.Aa.vang = zeros(3);
+uvms.Aa.ha = zeros(1); 
 uvms.Aa.t = zeros(6); 
 uvms.Aa.alt_land = zeros(1); 
 uvms.Aa.xi = zeros(1);
 uvms.Aa.min_alt = zeros(); 
 uvms.Aa.null = 0;
 uvms.Aa.jl = zeros(); 
-%uvms.A.v_rho = zeros(3,1); 
 uvms.Aa.PreferredConfig=zeros(4);
 
 end
