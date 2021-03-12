@@ -116,7 +116,9 @@ uvms.Jnull = [uvms.Jvlin; uvms.Jvang];
 %% Ex 4.2: joint limit
 uvms.J.jl = [eye(7), zeros(7,6)];  %We are directly acting on the joint
 
-%% Ex 5.1 
+%% Ex 5.1: preferred configuration
 uvms.JPreferredConfig = [eye(4), zeros(4,3), zeros(4,6)];
 
+%% Ex 6.1: vehicle contrained velocity
+uvms.Jvc=[zeros(6,7), eye(6)];
 end

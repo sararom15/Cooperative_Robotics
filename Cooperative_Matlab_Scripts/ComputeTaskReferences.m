@@ -78,7 +78,10 @@ for i = 1:length(uvms.q)
 end 
 
 %% Ex5.1 : reference for Preferred Configuration for the Joints 
-
 uvms.xdot.PreferredConfig = - 0.1 * (uvms.q(1:length(uvms.PreferredConfig)) - uvms.PreferredConfig);
+
+%% Ex 6.1: vehicle contrained velocity
+uvms.xdot.vc = uvms.p_dot; 
+
 
 

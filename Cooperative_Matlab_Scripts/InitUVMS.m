@@ -77,6 +77,7 @@ uvms.Jua = [];
 uvms.Jxi = [];
 uvms.Jnull = [];
 uvms.JPreferredConfig = [];
+uvms.Jvc=[];
 
 uvms.xdot.jl = [];
 uvms.xdot.mu = [];
@@ -90,6 +91,7 @@ uvms.xdot.ua = [];
 uvms.xdot.xi = []; 
 uvms.xdot.null = []; 
 uvms.xdot.PreferredConfig = []; 
+uvms.xdot.vc=[];
 
 uvms.A.jl = zeros();
 uvms.A.mu = 0;
@@ -104,7 +106,7 @@ uvms.A.ua = zeros(6,6);
 uvms.A.xi = zeros(1,1); 
 uvms.A.null = zeros(6,6);
 uvms.A.PreferredConfig = zeros(4);
-
+uvms.A.vc=zeros(6);
 
 uvms.Aa.vlin = zeros(3);
 uvms.Aa.vang = zeros(3);
@@ -116,6 +118,7 @@ uvms.Aa.min_alt = zeros();
 uvms.Aa.null = 0;
 uvms.Aa.jl = zeros(); 
 uvms.Aa.PreferredConfig=zeros(4);
+uvms.Aa.vc=zeros(6);
 
 end
 

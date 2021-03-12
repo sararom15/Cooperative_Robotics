@@ -77,12 +77,10 @@ for t = 0:deltat:end_time
    
     % main kinematic algorithm initialization
     % rhop order is [qdot_1, qdot_2, ..., qdot_7, xdot, ydot, zdot, omega_x, omega_y, omega_z]
+    
+    %% TPIK1
     rhop = zeros(13,1);
     Qp = eye(13); 
-    % add all the other tasks here!
-    % the sequence of iCAT_task calls defines the priority
-    
-
 
     %% Joint limit control task (safety task)
     [Qp, rhop] = iCAT_task(uvms.A.jl, uvms.J.jl, Qp, rhop, uvms.xdot.jl, 0.0001, 0.01, 10);
@@ -108,8 +106,41 @@ for t = 0:deltat:end_time
     %%
     [Qp, rhop] = iCAT_task(eye(13),     eye(13),    Qp, rhop, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
     
+    
+    %% TPIK2
+    rhop2 = zeros(13,1);
+    Qp2 = eye(13); 
+    
+    %% Vehicle constrained velocity
+    [Qp2, rhop2] = iCAT_task(uvms.A.vc, uvms.Jvc, Qp2, rhop2, uvms.xdot.vc, 0.0001, 0.01, 10);
+
+
+    %% Joint limit control task (safety task)
+    [Qp2, rhop2] = iCAT_task(uvms.A.jl, uvms.J.jl, Qp2, rhop2, uvms.xdot.jl, 0.0001, 0.01, 10);
+
+    %% Minimum altitude control task (safety task)
+    [Qp2, rhop2] = iCAT_task(uvms.A.min_alt, uvms.Jalt, Qp2, rhop2, uvms.xdot.min_alt, 0.0001, 0.01, 10);
+
+    %% Horizontal Attitude control task (safety task)
+    [Qp2, rhop2] = iCAT_task(uvms.A.ha, uvms.Jha, Qp2, rhop2, uvms.xdot.ha, 0.0001, 0.01, 10);
+
+    %% "Safe Navigation action": Vehicle Position control task
+    [Qp2, rhop2] = iCAT_task(uvms.A.vang, uvms.Jvang, Qp2, rhop2, uvms.xdot.vang, 0.0001, 0.01, 10);
+    [Qp2, rhop2] = iCAT_task(uvms.A.vlin, uvms.Jvlin, Qp2, rhop2, uvms.xdot.vlin, 0.0001, 0.01, 10);
+
+    %% Vehicle Null velocity non-reactive control task
+    [Qp2, rhop2] = iCAT_task(uvms.A.null, uvms.Jnull, Qp2, rhop2, uvms.xdot.null, 0.0001, 0.01, 10);
+
+    %% Tool position control task
+    [Qp2, rhop2] = iCAT_task(uvms.A.t, uvms.Jt, Qp2, rhop2, uvms.xdot.t, 0.0001, 0.01, 10);
+    
+    %% Preferred configuration (first four joints)
+    [Qp2, rhop2] = iCAT_task(uvms.A.PreferredConfig,    uvms.JPreferredConfig,    Qp2, rhop2, uvms.xdot.PreferredConfig,  0.0001,   0.01, 10);
+    %%
+    [Qp2, rhop2] = iCAT_task(eye(13),     eye(13),    Qp2, rhop2, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
+    
     % get the two variables for integration
-    uvms.q_dot = rhop(1:7);
+    uvms.q_dot = rhop2(1:7);
     uvms.p_dot = rhop(8:13);
     
     % Integration

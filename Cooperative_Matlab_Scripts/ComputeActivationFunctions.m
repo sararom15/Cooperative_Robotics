@@ -24,7 +24,7 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.null = zeros(6); 
             uvms.Aa.t = zeros(6); 
             uvms.Aa.PreferredConfig = eye(4); %Optional
-
+            uvms.Aa.vc = eye(6);
             
         case 2 %Floating Manipulation Action 
             uvms.Aa.jl = eye(1); %Safety 
@@ -35,6 +35,7 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.null = eye(1);
             uvms.Aa.t = eye(1); 
             uvms.Aa.PreferredConfig = eye(4); %Optional 
+            uvms.Aa.vc = eye(6);
 
     end 
     
@@ -93,3 +94,6 @@ for i = 1:length(uvms.PreferredConfig)
    uvms.A.PreferredConfig(i, i) = IncreasingBellShapedFunction(uvms.PreferredConfig(i) - 0.1, uvms.PreferredConfig(i),0,1,norm(diff(i)));
 end
 uvms.A.PreferredConfig = uvms.A.PreferredConfig * uvms.Aa.PreferredConfig;
+
+%% Ex 6.1
+uvms.A.vc=eye(6);
