@@ -111,7 +111,7 @@ for t = 0:deltat:end_time
     rhop2 = zeros(13,1);
     Qp2 = eye(13); 
     
-    %% Vehicle constrained velocity
+    %% Vehicle constrained velocity (non-reactive control task) 
     [Qp2, rhop2] = iCAT_task(uvms.A.vc, uvms.Jvc, Qp2, rhop2, uvms.xdot.vc, 0.0001, 0.01, 10);
 
 
@@ -139,12 +139,25 @@ for t = 0:deltat:end_time
     %%
     [Qp2, rhop2] = iCAT_task(eye(13),     eye(13),    Qp2, rhop2, zeros(13,1),  0.0001,   0.01, 10);    % this task should be the last one
     
+    
+   
     % get the two variables for integration
     uvms.q_dot = rhop2(1:7);
     uvms.p_dot = rhop(8:13);
     
     % Integration
 	uvms.q = uvms.q + uvms.q_dot*deltat;
+    
+    %disturbance
+    uvms.disturb = zeros(1,3); 
+
+    for i = 1:2 
+        uvms.disturb(i) = 0.1*sin(2*0.05*pi*t);
+    end 
+    
+    uvms.p_dot(1:3) = uvms.p_dot(1:3) + (uvms.vTw(1:3,1:3) * uvms.disturb'); 
+    
+    
     % beware: p_dot should be projected on <v>
     uvms.p = integrate_vehicle(uvms.p, uvms.p_dot, deltat);
     

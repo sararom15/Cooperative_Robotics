@@ -36,6 +36,8 @@ plt.a(1:7, loop) = diag(uvms.A.jl);
 plt.a(8, loop) = uvms.A.mu;
 plt.a(9, loop) = uvms.A.ha(1,1);
 
+plt.error(1,loop) = norm(uvms.wTt(1:3,4) - uvms.wTg(1:3,4));
+
 plt.toolx(:,loop) = uvms.wTt(1,4);
 plt.tooly(:,loop) = uvms.wTt(2,4);
 end

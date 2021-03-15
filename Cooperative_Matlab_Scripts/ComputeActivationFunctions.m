@@ -16,7 +16,7 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
 %% Missions
     switch mission.phase
         case 1 %Safe Navigation Action 
-            uvms.Aa.min_alt = eye(1); % Safe Waypoint 
+            uvms.Aa.min_alt = zeros(1); % Safe Waypoint 
             uvms.Aa.jl = eye(1); %Safety
             uvms.Aa.ha = eye(1); % Safe Waypoint
             uvms.Aa.vang = eye(3); % Safe Waypoint
@@ -29,7 +29,7 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
         case 2 %Floating Manipulation Action 
             uvms.Aa.jl = eye(1); %Safety 
             uvms.Aa.ha = eye(1); %Safety 
-            uvms.Aa.min_alt = eye(1); %Safety
+            uvms.Aa.min_alt = zeros(1); %Safety
             uvms.Aa.vang = zeros(3,3);    
             uvms.Aa.vlin = zeros(3,3);
             uvms.Aa.null = eye(1);
