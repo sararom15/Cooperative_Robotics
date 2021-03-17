@@ -53,11 +53,11 @@ f = figure('units','normalized','outerposition',[0 0 1 1], 'visible', 'off');
 hplot = plot(plt.t, plt.altitude,'b');
 set(hplot, 'LineWidth', 2);
 hold on; 
-hplot1 = plot([plt.time1, plt.time1], [0, 35], 'g'); 
+hplot1 = plot([plt.time1, plt.time1], [0, 6], 'g'); 
 hold on; 
-hplot2 = plot([plt.time2, plt.time2], [0, 35], 'y');
+hplot2 = plot([plt.time2, plt.time2], [0, 5], 'y');
 hold on; 
-hplot3 = plot([plt.time3, plt.time3], [0, 35], 'r');
+hplot3 = plot([plt.time3, plt.time3], [0, 6], 'r');
 legend('altitude', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '5.jpg']);
 
@@ -155,6 +155,49 @@ hplot3 = plot([plt.time3, plt.time3], [0, 1], 'r');
 legend('xi', 'EndingPhase1', 'EndingPhase2', 'EndingPhase3');
 saveas(f, ['Results/' '7.jpg']);
 
+
+%% tool position 
+f = figure('units','normalized','outerposition',[0 0 1 1], 'visible', 'off');
+subplot(1,3,1);
+hplot = plot(plt.t, plt.toolPos(1,:), 'r');
+set(hplot, 'LineWidth', 2);
+hold on
+hplot2 = plot([0,65], [plt.goalTool(1), plt.goalTool(1)], 'g');
+legend('x tool position', 'x goal position','Location', 'southeast') 
+
+subplot(1,3,2);
+hplot = plot(plt.t, plt.toolPos(2,:), 'r');
+set(hplot, 'LineWidth', 2);
+hold on
+hplot2 = plot([0,65], [plt.goalTool(2), plt.goalTool(2)], 'g');
+legend('z tool position', 'z goal position','Location', 'southeast')
+
+subplot(1,3,3);
+hplot = plot(plt.t, plt.toolPos(3,:), 'r');
+set(hplot, 'LineWidth', 2);
+hold on
+hplot2 = plot([0,65], [plt.goalTool(3), plt.goalTool(3)], 'g');
+legend('y tool position', 'y goal position', 'Location', 'southeast')
+saveas(f, ['Results/' 'tool_pos.jpg']); 
+
+
+%% joint tool configurations 
+f = figure('units','normalized','outerposition',[0 0 1 1], 'visible', 'off');
+hold on;
+for j = 1:7
+    subplot(3,3,j)
+    set(gca,'ColorOrderIndex',3)
+    hplot = plot(plt.t, plt.q(j,:));
+    ylim([-3, 3])
+    set(hplot, 'LineWidth', 2);
+    %hplot = yline(plt.goal(3,end), 'LineWidth', 3, 'LineStyle','--');
+    xlabel('time [s]')
+    ylabel(strcat('q_',num2str(j), ' [rad]'))
+    hplot = yline(plt.jlmin(j),'r');
+    hplot = yline(plt.jlmax(j),'r');
+end
+
+saveas(f, ['Results/' 'tool_configuration.jpg']); 
 
 
 end 

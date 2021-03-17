@@ -14,6 +14,12 @@ function [plt] = InitDataPlot( maxloops)
     plt.time2 = 0; 
     plt.time3 = 0; 
     
+    plt.toolPos = zeros(3, maxloops); 
+    
+    plt.goalTool = zeros(3,maxloops); 
+    
+    plt.Ajl=zeros();
+    
     plt.xdot_jl = zeros(7, maxloops);
     plt.xdot_mu = zeros(1, maxloops);
     plt.xdot_t = zeros(6, maxloops);

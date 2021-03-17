@@ -10,6 +10,7 @@ function [ plt ] = UpdateDataPlot( plt, uvms, t, loop )
 plt.t(loop) = t;
 
 plt.toolPos(:, loop) = uvms.wTt(1:3,4);
+plt.goalTool = uvms.goalPosition; 
 
 plt.altitude(:, loop) = uvms.altitude;
 plt.xi(:, loop) = norm(uvms.v_xi); 
@@ -21,9 +22,13 @@ plt.time3 = uvms.time3;
 plt.q(:, loop) = uvms.q;
 plt.q_dot(:, loop) = uvms.q_dot;
 
+plt.jlmin = uvms.jlmin; 
+plt.jlmax = uvms.jlmax; 
+
 plt.p(:, loop) = uvms.p;
 plt.p_dot(:, loop) = uvms.p_dot;
 
+plt.Ajl=uvms.Ajl;
 %plt.xdot_jl(:, loop) = uvms.xdot.jl;
 %plt.xdot_mu(:, loop) = uvms.xdot.mu;
 plt.xdot_t(:, loop) =  blkdiag(uvms.wTv(1:3,1:3), uvms.wTv(1:3,1:3))*uvms.xdot.t;

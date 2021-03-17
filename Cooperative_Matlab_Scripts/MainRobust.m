@@ -6,7 +6,7 @@ close all
 
 % Simulation variables (integration and final time)
 deltat = 0.005;
-end_time = 90;
+end_time = 80;
 loop = 1;
 maxloops = ceil(end_time/deltat);
 
@@ -109,7 +109,6 @@ for t = 0:deltat:end_time
     [Qp, ydotbar] = iCAT_task(uvms.A.ha,     uvms.Jha,    Qp, ydotbar, uvms.xdot.ha,  0.0001,   0.01, 10);    
     
     %% Ex 1.1.2: "Safe Navigation aciton": Vehicle Position control task 
-    %[Qp, ydotbar] = iCAT_task(uvms.A.v,     uvms.Jv,    Qp, ydotbar, uvms.xdot.v,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vang,     uvms.Jvang,    Qp, ydotbar, uvms.xdot.vang,  0.0001,   0.01, 10); 
     [Qp, ydotbar] = iCAT_task(uvms.A.vlin,     uvms.Jvlin,    Qp, ydotbar, uvms.xdot.vlin,  0.0001,   0.01, 10); 
 
@@ -139,8 +138,14 @@ for t = 0:deltat:end_time
     uvms.q = uvms.q + uvms.q_dot*deltat;
     % beware: p_dot should be projected on <v>
     
-    % disturbance for roll angle 
-    %uvms.p_dot(4) = 0.5*sin(2*pi*0.5*t); 
+    % disturbance 
+%     uvms.disturb = zeros(1,3); 
+% 
+%     for i = 1:2 
+%         uvms.disturb(i) = 0.1*sin(2*0.05*pi*t);
+%     end 
+%     
+%     uvms.p_dot(1:3) = uvms.p_dot(1:3) + (uvms.vTw(1:3,1:3) * uvms.disturb');  
     
     uvms.p = integrate_vehicle(uvms.p, uvms.p_dot, deltat);
     
@@ -158,7 +163,7 @@ for t = 0:deltat:end_time
     % add debug prints here
     if (mod(t,0.1) == 0)
         t
-        %uvms.sensorDistance
+        %uvms.altitude
         %w_ang, w_lin] = CartError(uvms.wTgv, uvms.wTv);
         %w_ang 
         %w_lin
