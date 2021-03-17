@@ -32,7 +32,7 @@ function [uvms] = ComputeActivationFunctions(uvms, mission)
             uvms.Aa.min_alt = zeros(1); %Safety
             uvms.Aa.vang = zeros(3,3);    
             uvms.Aa.vlin = zeros(3,3);
-            uvms.Aa.null = eye(1);
+            uvms.Aa.null = eye(6);
             uvms.Aa.t = eye(1); 
             uvms.Aa.PreferredConfig = eye(4); %Optional 
             uvms.Aa.vc = eye(6);
@@ -81,7 +81,11 @@ uvms.A.xi = IncreasingBellShapedFunction(0.025, 0.1, 0, 1, norm(uvms.v_xi)) * uv
 
 %% Vehicle Null Velocity control task 
 % non-reactive task 
-uvms.A.null =  eye(6) * uvms.Aa.null;
+%uvms.A.null = eye(6) * uvms.Aa.null; 
+
+%
+error = norm(uvms.wTt(1:3,4) - uvms.wTg(1:3,4));
+uvms.A.null =  DecreasingBellShapedFunction(0.01, 0.2, 0, 1, error) * uvms.Aa.null;
 
 %% Joint limit control task 
 for i = 1:length(uvms.q) 

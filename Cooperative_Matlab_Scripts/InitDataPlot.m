@@ -19,9 +19,6 @@ function [plt] = InitDataPlot( maxloops)
     
     plt.xi = zeros(1, maxloops); 
     
-    plt.time1 = 0; 
-    plt.time2 = 0; 
-    plt.time3 = 0; 
     
     plt.xdot_jl = zeros(7, maxloops);
     plt.xdot_mu = zeros(1, maxloops);

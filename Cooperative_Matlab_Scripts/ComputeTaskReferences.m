@@ -22,9 +22,6 @@ uvms.xdot.vang = Saturate(0.8 * w_ang, 0.3);
 %position vehicle control task 
 uvms.xdot.vlin = Saturate(0.8 * w_lin, 0.3);
 
-uvms.xdot.v= 0.2*[w_lin; w_ang]; 
-uvms.xdot.v(1:3)=Saturate(uvms.xdot.v(1:3),0.2);
-uvms.xdot.v(4:6)=Saturate(uvms.xdot.v(4:6),0.2);
 
 %% reference for horizontal attitude
 uvms.xdot.ha = 0.2*(0-norm(uvms.v_rho));
