@@ -17,7 +17,7 @@ end
 uvms.q_dot = [0 0 0 0 0 0 0]';
 uvms.p_dot = [0 0 0 0 0 0]';
 
-% Constants for the minimum altitude control task
+% Constants used for the minimum altitude control task
 uvms.min_dist = 1;
 buffer = 0.5;
 uvms.max_dist = uvms.min_dist + buffer;
@@ -69,7 +69,6 @@ uvms.xdot.jl = [];
 uvms.xdot.mu = [];
 uvms.xdot.ha = [];
 uvms.xdot.t = [];
-%uvms.xdot.v = [];
 uvms.xdot.vlin = []; 
 uvms.xdot.vang = []; 
 uvms.xdot.min_alt = []; 
@@ -83,8 +82,7 @@ uvms.xdot.null = [];
 uvms.A.jl = zeros();
 uvms.A.mu = 0;
 uvms.A.ha = zeros(1,1);
-uvms.A.t = zeros(6,6);
-%uvms.A.v = zeros(6,6); 
+uvms.A.t = zeros(6,6); 
 uvms.A.vang = zeros(3,3); 
 uvms.A.vlin = zeros(3,3); 
 uvms.A.min_alt = zeros();
@@ -93,7 +91,7 @@ uvms.A.ua = zeros(6,6);
 uvms.A.xi = zeros(1,1); 
 uvms.A.null = zeros(6,6);
 
-%uvms.Aa.v = eye(6); 
+
 uvms.Aa.vlin = eye(3);
 uvms.Aa.vang = eye(3);
 uvms.Aa.ha = eye(1); 
@@ -103,7 +101,6 @@ uvms.Aa.xi = zeros(1);
 uvms.Aa.min_alt = zeros(1); 
 uvms.Aa.null = 0;
 uvms.Aa.jl = zeros(); 
-%uvms.A.v_rho = zeros(3,1); 
 
 end
 
