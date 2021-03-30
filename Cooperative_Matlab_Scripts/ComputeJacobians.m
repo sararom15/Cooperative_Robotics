@@ -89,7 +89,8 @@ end
 uvms.Jxi = [zeros(1,7) zeros(1,3) xi']; 
 
 %% Ex 4.1:Compute Jacobian for Vehicle  Null  Velocities  Control  Task
-uvms.Jnull = [uvms.Jvang; uvms.Jvlin]; 
+uvms.Jnull = uvms.Jv;
+
 %% Ex 4.2: Compute Jacobian for joint limit Control task 
 uvms.J.jl = [eye(7), zeros(7,6)];  %We are directly acting on the joint
 
