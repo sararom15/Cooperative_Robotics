@@ -30,8 +30,8 @@ uvms.Jt = [uvms.Jt_a uvms.Jt_v];
 uvms.Jvang = [zeros(3,7) zeros(3,3) uvms.wTv(1:3, 1:3)];
 %Jacobian for the linear velocity wrt world frame
 uvms.Jvlin = [zeros(3,7) uvms.wTv(1:3, 1:3) zeros(3,3)]; 
+uvms.Jv = [uvms.Jvlin; uvms.Jvang];
 
-uvms.Jv = [uvms.Jvang; uvms.Jvlin];
 %% Compute Jacobian for the Horizontal Attitude Control Task 
 %take into account the versor k of the vehicle frame and world frame 
 w_kw = [0 0 1]';
