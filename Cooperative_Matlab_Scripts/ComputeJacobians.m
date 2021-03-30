@@ -34,6 +34,8 @@ end
 uvms.Jha = [zeros(1,7) zeros(1,3) rho']; 
 
 %% Jacobian for the minimum altitude from the seafloor 
+uvms.Jv = [uvms.Jvlin; uvms.Jvang]; 
+
 uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv; 
 
 %% Jacobian for underactuated control task 
