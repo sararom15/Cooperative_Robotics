@@ -42,7 +42,7 @@ uvms.Jalt = [0 0 1 0 0 0] * uvms.Jv;
 uvms.Jua = [zeros(6,7), eye(6)]; 
 
 %% Jacobian for Vehicle Null velocities
-uvms.Jnull = [uvms.Jvlin; uvms.Jvang]; 
+uvms.Jnull = [uvms.Jvang; uvms.Jvlin]; 
 
 %% Jacobian for Joint limits
 uvms.J.jl = [eye(7), zeros(7,6)];  %We are directly acting on the joint
